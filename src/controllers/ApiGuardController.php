@@ -37,14 +37,14 @@ class ApiGuardController extends Controller
 
     public function __construct()
     {
+        // Let's instantiate the response class first
+        $this->manager = new Manager;
+
+        $this->manager->parseIncludes(Input::get(Config::get('api-guard::includeKeyword', 'include'), array()));
+
+        $this->response = new Response($this->manager);
+
         $this->beforeFilter(function () {
-
-            // Let's instantiate the response class first
-            $this->manager = new Manager;
-
-            $this->manager->parseIncludes(Input::get(Config::get('api-guard::includeKeyword', 'include'), array()));
-
-            $this->response = new Response($this->manager);
 
             // api-guard might not be the only before filter on the controller
             // loop through any before filters and pull out $apiMethods in the controller
